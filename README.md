@@ -8,6 +8,7 @@ timestamp : 요청이 처리되어 나간 시간  <br>
 path : 요청url  <br>
 body : API 결과값<br>
 
+Request 예시: http://localhost:8080/blogs?query="맛집"&sort="accuracy"&page=10&size=10
 example
 ```json
 {  
