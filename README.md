@@ -1,8 +1,7 @@
 # blog-seasrch-service
 
 ## Download url
-
-실행 : java -jar .jar
+https://drive.google.com/file/d/1OcZVyMwsWWEtnE1lbLwLzypNo7e-7K9z/view?usp=share_link
 
 ## SuccessResponse
 timestamp : 요청이 처리되어 나간 시간  <br>
@@ -51,8 +50,8 @@ GET /blogs?query={query}&sort={sort}&page={page}&size={size}<br>
 RequestParam :   <br>
 String query; // 검색을 원하는 단어<br>
 String sort; // 결과 문서 정렬 방식, accuracy(정확도순) 또는 recency(최신순), 기본 값 accuracy<br>
-Integer page;  // 결과 페이지 번호, 1~50 사이의 값, 기본 값 1<br>
-Integer size;  // 한 페이지에 보여질 문서 수, 1~50 사이의 값, 기본 값 10<br>
+Integer page;  // 결과 페이지 번호, 1-50 사이의 값, 기본 값 1<br>
+Integer size;  // 한 페이지에 보여질 문서 수, 1-50 사이의 값, 기본 값 10<br>
 
 ResponseBody.body[] :  <br>
 String title;<br>
@@ -66,7 +65,6 @@ ErrorResponse :  <br>
 400 Bad Request // request 형식 오류<br>
 
 ## 2. 인기 키워드 조회
-## 인기 키워드 조회
 GET /popularKeywords<br>
 
 ResponseBody.body[] : // count 내림차순 정렬  <br>
@@ -76,19 +74,19 @@ count<br>
 ErrorResponse :  <br>
 
 
-### 트래픽이 많고, 저장되어 있는 데이터가 많음을 염두에 둔 구현
+### 1. 트래픽이 많고, 저장되어 있는 데이터가 많음을 염두에 둔 구현
 #### caching 작업
 - Blog테이블을 만들어 두어, 캐싱한다.<br>
 - 캐싱 작업이 되어있는 경우 캐시를 사용하여 값을 불러오고, 없는 경우 API 호출하여 데이터를 가져온다.<br>
 
-### 동시성 이슈가 발생할 수 있는 부분을 염두에 둔 구현 (예시. 키워드 별로 검색된 횟수의 정확도)
+### 2. 동시성 이슈가 발생할 수 있는 부분을 염두에 둔 구현 (예시. 키워드 별로 검색된 횟수의 정확도)
 
-### 인기 검색어 키워드 검색 횟수 증가
+### 3. 인기 검색어 키워드 검색 횟수 증가
 - 동시성 이슈 발생할 수 있는 원인 : 검색을 동시에 연속적으로 하는 경우, update할 때 DB에서 락 걸릴수 있다.<br>
 - 방법1. 비관적 락을 사용해준다.<br>
 - 방법2. native query를 사용하여, 정확한 쿼리를 사용한다.<br>
 
-### 카카오 블로그 검색 API에 장애가 발생한 경우, 네이버 블로그 검색 API를 통해 데이터 제공
+### 4. 카카오 블로그 검색 API에 장애가 발생한 경우, 네이버 블로그 검색 API를 통해 데이터 제공
 - 카카오, 네이버 dev 사이트를 확인해보면, request가 sort, size, page 요청 쿼리가 같은걸 알 수 있다.<br>
 - Kakao, Naver 에서 발생 가능한 에러코드를 통일한다.<br>
 - Kakao, Naver 의 리턴값을 받아 custom DTO 에 넣음으로써 Response 통일한다.<br>
